@@ -1,3 +1,6 @@
-Meteor.publish('nearbyPlaces', function(coords) {
-  Places.find({'loc.coordinates': {$near: {$geometry: {type: "Point", coordinates: [coords.latitude,coords.longitude]}}}})
+Meteor.publish('placesNearMe', function(bottomLeft, topRight) {
+  if (!bottomLeft && !topRight) {
+    return []
+  }
+  return Places.find( { loc : { $geoWithin :{ $box : [bottomLeft, topRight]} } } )
 });
